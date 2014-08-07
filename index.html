@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Customize ME</title>
+
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <!-- Context menu -->
+        <link href="css/jquery.contextMenu.css" rel="stylesheet">
+        <!-- Minicolors -->
+        <link href="js/minicolors/jquery.minicolors.css" rel="stylesheet">
+
+        <!-- App.css -->
+        <link href="css/app.css" rel="stylesheet">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="page-header">Customize ME!</h1>
+            <div class="alert alert-info" role="alert">Press Escape to remove selected element, right click on selected element to get more options.</div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="canvas-wrapper">
+                        <canvas id="canvas"/>
+                    </div>
+                    <div class="alert alert-danger scaled-images-warning" role="alert">Exceeded the size of a picture (can be blurred result)</div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel-group canvas-controls" id="accordion">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#styleAndColor">
+                                        <span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;Setting style and color
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="styleAndColor" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="style-and-color"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#my_pictures">
+                                        <span class="glyphicon glyphicon-picture"></span>&nbsp;&nbsp;My Pictures
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="my_pictures" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form action="file-upload.php" method="post" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <input type="file" name="file" class="form-control">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
+                                    <ul class="uploaded-images">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                        <span class="glyphicon glyphicon-leaf"></span>&nbsp;&nbsp;Clipart
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#addText">
+                                        <span class="glyphicon glyphicon-font"></span>&nbsp;&nbsp;Text
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="addText" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <button type="button" class="btn btn-primary add-text">Add Text</button>
+                                    <ul class="canvas-objects text"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
+                                        <span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;Drawing
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseFive" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#otherProducts">
+                                        <span class="glyphicon glyphicon-search"></span>&nbsp;&nbsp;View other products
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="otherProducts" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="other-products">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- jQuery -->
+        <script src="js/jquery.min.js"></script>
+        <!-- Include bootstrap with all compiled plugins -->
+        <script src="js/bootstrap.min.js"></script>
+        <!-- fabric JS -->
+        <script src="js/fabric.js"></script>
+        <!-- jQuery form - ajax file upload -->
+        <script src="js/jquery.form.min.js"></script>
+        <!-- jQuery UI position - required by context menu -->
+        <script src="js/jquery.ui.position.js"></script>
+        <!-- jQuery contect menu -->
+        <script src="js/jquery.contextMenu.js"></script>
+        <!-- jQuery minicolors -->
+        <script src="js/minicolors/jquery.minicolors.min.js"></script>
+        <!-- Application JS -->
+        <script src="js/app.js"></script>
+
+        <script type="text/javascript">
+            $('#canvas').customizeMe({
+                products: [
+                    {
+                        backgroundImage: 'images/heart.png',
+                        overlayImage: 'images/heart-overlay.png',
+                        smallImage: 'images/heart-small.png',
+                        // clipping region should cover all transparent areas of
+                        // overlay image or total size of product image will also work,
+                        // if an overlay image is not available then
+                        // these dimensions should be the area where user can
+                        // put elements
+                        // left, top, width, height
+                        dimensions: [75,0,600,600],
+                        dpi: 63
+                    },
+                    {
+                        backgroundImage: 'images/mobilecover.png',
+                        overlayImage: 'images/mobilecover-overlay.png',
+                        smallImage: 'images/mobilecover-small.png',
+                        dimensions: [75,0,600,600],
+                        dpi: 150
+                    },
+                    {
+                        backgroundImage: 'images/watch.png',
+                        overlayImage: 'images/watch-overlay.png',
+                        smallImage: 'images/watch-small.png',
+                        dimensions: [75,0,600,600],
+                        dpi: 48
+                    },
+                    {
+                        backgroundImage: 'images/white-tshirt.png',
+                        smallImage: 'images/white-tshirt-small.png',
+                        dimensions: [255,71,240,376],
+                        // this product will be loaded by default
+                        default: 1,
+                        dpi: 23,
+                        colors: {
+                            white : {
+                                backgroundImage: 'images/white-tshirt.png',
+                                default: 1
+                            },
+                            yellow : {
+                                backgroundImage: 'images/yellow-tshirt.png'
+                            }
+                        }
+                    }
+                ]
+            });
+        </script>
+    </body>
+</html>
