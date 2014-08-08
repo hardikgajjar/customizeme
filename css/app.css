@@ -63,13 +63,14 @@
 .canvas-object div.text textarea { width: 100%; }
 .canvas-object div.controls { margin-top: 2px; }
 .canvas-object div.controls select { width: auto; display: inline-block; }
-.canvas-object div.controls select,.canvas-object div.controls button,
+.canvas-object div.controls select,
 .canvas-object div.controls div.minicolors { margin-left: 2px; }
 .canvas-object div.controls span.font-color {
     position: absolute;
     z-index: 1;
     pointer-events: none;
     width: 23px;
+    height: 19px;
     padding: 0;
     background: #eff3f6;
     text-align: center;
@@ -79,6 +80,7 @@
     width: 23px;
     position: relative;
 }
+.canvas-object div.controls button.text-remove { margin-top: 7px; }
 
 /*font family classes*/
 .arial { font-family: 'arial'; }

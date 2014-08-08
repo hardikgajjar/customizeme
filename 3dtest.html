@@ -1,0 +1,172 @@
+<html>
+<head>
+    <script src="js/jquery.min.js"></script>
+    <script src="http://printio.ru/assets/threejs/build/three-f8c74b6906d1221d068e97fc2bd4eb4b.js"></script>
+    <script src="http://printio.ru/assets/threejs/examples/js/loaders/OBJLoader-a790f064000c622329399f673cf48f70.js"></script>
+    <script src="http://printio.ru/assets/threejs/examples/js/controls/OrbitControls-f6bf517562cb82cbc75158d4231d979f.js"></script>
+    <script src="http://printio.ru/assets/threejs/examples/js/Detector-8fa2e0657ef5268d58a34c794fbd9b98.js"></script>
+</head>
+<body>
+    <div class="preview-3d-wrapper modal">
+      <div class="container-3d">
+        <img alt="3d spinner" class="spinner" src="http://assets0.printio.ru/assets/3d_spinner-8c450f054d92516dce121cd472b9718b.gif" />
+      </div>
+    </div>
+
+    <script type="text/javascript">
+        var width = 600, height = 600;
+        var scene = new THREE.Scene;
+
+        //init camera controls
+        var camera = new THREE.PerspectiveCamera(60, width / height, 1, 1e3);
+        camera.position.z = 300;
+        var controls = new THREE.OrbitControls(camera, $(".container-3d")[0]);
+        controls.addEventListener("change", render);
+        controls.userZoom = !1;
+        controls.autoRotate = !0;
+        controls.maxDistance = 1e3;
+        controls.minDistance = 50;
+
+        //init lights
+        var directionalLight = new THREE.DirectionalLight(5592405);
+        directionalLight.position.set(1, 1, 1);
+        scene.add(directionalLight);
+        var ambient = new THREE.AmbientLight(11184810);
+        scene.add(this.ambient);
+
+        //init renderer
+        var renderer = new THREE.WebGLRenderer({
+            antialias: !0,
+            alpha: !0
+        });
+        renderer.setSize(width, height);
+        renderer.shadowMapEnabled = !0;
+        renderer.shadowMapSoft = !0;
+        renderer.shadowCameraNear = 3;
+        renderer.shadowCameraFar = camera.far;
+        renderer.shadowCameraFov = 50;
+        renderer.shadowMapBias = .0039;
+        renderer.shadowMapDarkness = .5;
+        renderer.shadowMapWidth = 1024;
+        renderer.shadowMapHeight = 1024;
+        $(".container-3d").html("").append(renderer.domElement);
+
+        //load object
+        var t = new THREE.OBJLoader;
+        var obj;
+        t.load("/customizeme/images/mug.obj", whenModelLoaded);
+
+        function render() {
+            renderer.render(scene, camera);
+        }
+
+        function whenModelLoaded(t) {
+            this.object = t;
+            obj = t;
+            // model's customization
+            var e = getModelCustomization();
+            e && e.camera ? camera.position.set.apply(camera.position, e.camera) : camera.position.set.apply(camera.position, [-70, 100, 100]), camera.rotation.set(-1.53, -.87, -1.52), applyTexture(this)
+        }
+
+        function applyTexture(_this) {
+            if (_this.object) {
+                var t = new Image;
+                t.onload = function() {
+                    whenCroppedDesignImageLoaded(t), t.onload = null
+                }, t.src = toDataURLCropped()
+            }
+        }
+
+        function toDataURLCropped() {
+            return '/customizeme/images/yellow-tshirt.png'
+        }
+
+
+        var croppedDesignImg;
+        var CASE_TEXTURE = '/customizeme/images/handmadepaper-ef82846c8fe3f0afda9bf0eb74465a1e.png';
+        function whenCroppedDesignImageLoaded(t) {
+            croppedDesignImg = t;
+            var e = new Image;
+            e.onload = function() {
+                whenCaseTextureLoaded(e), e.onload = null
+            }, e.src = CASE_TEXTURE
+        }
+        function whenCaseTextureLoaded(t) {
+            var e = getCombinedImageDataURL(t),
+                i = new Image;
+            i.onload = function() {
+                whenCombinedImageLoaded(i), i.onload = null
+            }, i.src = e
+        }
+        function whenCombinedImageLoaded(t) {
+            var e = new THREE.Texture(t);
+            e.needsUpdate = !0;
+            scene.add(obj);
+            applyModelCustomization();
+            obj.castShadow = !0;
+            obj.receiveShadow = !1;
+            obj.children[0].material.map = e;
+            obj.children[0].castShadow = !0;
+            obj.children[1] && (obj.children[1].material.ambient = getThreeJsTextureColor()), render();
+        }
+        function getThreeJsTextureColor() {
+            var t = {
+                    white: 16777215,
+                    black: 3355443
+                },
+                e = "string" == typeof '#FFFFFF';
+            return new THREE.Color(t[e] || 16777215)
+        }
+        function applyModelCustomization() {
+            var t = getModelCustomization();
+            t && (obj.rotation.set.apply(obj.rotation, t.rotation || [0, 0, 0]), obj.position.set.apply(obj.position, t.position || [0, 0, 0]), obj.position.y += 20)
+        }
+        function getCombinedImageDataURL() {
+            var t = getModelCustomization(),
+                e = t && t.offset || [0, 0],
+                i = document.createElement("canvas");
+            i.width = croppedDesignImg.width + 2 * e[0], i.height = croppedDesignImg.height + 2 * e[1];
+            var n = i.getContext("2d");
+            return n.fillStyle = getTextureColor(), n.fillRect(0, 0, i.width, i.height), n.drawImage(croppedDesignImg, e[0], e[1], croppedDesignImg.width * (t.textureScaleX || 1), croppedDesignImg.height * (t.textureScaleY || 1)), i.toDataURL("png")
+        }
+        function getModelCustomization() {
+            return {
+                position: [0, -50, 0],
+                offset: [-20, 40],
+                camera: [-70, 100, 150],
+                textureScaleY: .82
+            };
+        }
+        function getTextureColor() {
+            var t = {
+                    white: "#fff",
+                    black: "#333"
+                },
+                e = "string" == typeof '#ffffff';
+            return t[e] || "#fff"
+        }
+
+        function preventRotationWhenDragging() {
+            var t;
+            $(".container-3d").on("mousedown", function() {
+                t = !0
+            }).on("mousemove", function() {
+                t && (controls.autoRotate = !1)
+            }), $(document).on("mouseup", function() {
+                t = !1, controls
+            })
+        }
+
+        // animate
+        function animate() {
+            window.requestAnimationFrame(animate.bind(this)), controls.update(), render()
+        }
+        animate();
+        preventRotationWhenDragging();
+
+        // show 3D view
+
+    </script>
+
+</body>
+</html>

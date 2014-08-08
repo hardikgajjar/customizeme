@@ -234,7 +234,7 @@
             var textControlsCounter = 1;
             $('.add-text').on('click', function() {
                 var html = $('<li class="canvas-object"></li>');
-                html.append('<div class="text"><div class="body"></div><div class="controls"><div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" id="fontFamilyMenu'+textControlsCounter+'" data-toggle="dropdown" data-placement="left" title="Font">Halvetica<span class="caret"></span></button><ul class="dropdown-menu font-family-menu" role="menu" aria-labelledby="fontFamilyMenu'+textControlsCounter+'"><li role="presentation"><a class="arial" data-fontname="arial" role="menuitem" tabindex="-1" href="#">Arial</a></li><li role="presentation"><a class="halvetica" data-fontname="halvetica" role="menuitem" tabindex="-1" href="#">Halvetica</a></li><li role="presentation"><a class="verdana" data-fontname="verdana" role="menuitem" tabindex="-1" href="#">Verdana</a></li></ul><select class="form-control font-size" name="font-size" title="Font Size" data-placement="left"><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="14">14</option><option value="18">18</option><option value="24">24</option><option value="30">30</option><option value="36">36</option><option value="48">48</option><option value="60">60</option><option value="72">72</option><option value="96">96</option></select><span class="glyphicon glyphicon-font font-color font-color-foreground"></span><span class="glyphicon glyphicon-tint font-color font-color-background"></span></div></div></div>');
+                html.append('<div class="text"><div class="body"></div><div class="controls"><div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" id="fontFamilyMenu'+textControlsCounter+'" data-toggle="dropdown" data-placement="left" title="Font">Halvetica<span class="caret"></span></button><ul class="dropdown-menu font-family-menu" role="menu" aria-labelledby="fontFamilyMenu'+textControlsCounter+'"><li role="presentation"><a class="arial" data-fontname="arial" role="menuitem" tabindex="-1" href="#">Arial</a></li><li role="presentation"><a class="halvetica" data-fontname="halvetica" role="menuitem" tabindex="-1" href="#">Halvetica</a></li><li role="presentation"><a class="verdana" data-fontname="verdana" role="menuitem" tabindex="-1" href="#">Verdana</a></li></ul><select class="form-control font-size" name="font-size" title="Font Size" data-placement="left"><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="14">14</option><option value="18">18</option><option value="24">24</option><option value="30">30</option><option value="36">36</option><option value="48">48</option><option value="60">60</option><option value="72">72</option><option value="96">96</option></select><span class="glyphicon glyphicon-font font-color font-color-foreground"></span><span class="glyphicon glyphicon-tint font-color font-color-background"></span><button type="button" class="btn btn-danger btn-xs pull-right text-remove"><span class="glyphicon glyphicon-remove"></span></button></div></div></div>');
                 textControlsCounter++;
                 var textarea = $('<textarea class="form-control">Sample Text</textarea>');
                 html.find('.body').append(textarea);
@@ -297,6 +297,14 @@
                 var obj = $(this).parents('.canvas-object').data('canvas-object-instance');
                 obj.set({fontSize: $(this).val()});
                 _this.canvas.renderAll();
+            });
+            //live bind text-remove
+            $('.canvas-objects.text').on('click', 'button.text-remove', function(){
+                var obj = $(this).parents('.canvas-object').data('canvas-object-instance');
+                var e = _this.objectToEl(obj);
+                if (e) e.remove();
+                _this.canvas.remove(obj);
+                return false;
             });
         },
         setupOtherProducts: function() {
